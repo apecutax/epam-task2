@@ -1,7 +1,6 @@
 package com.epam.jwd.runner;
 
 import com.epam.jwd.entity.Component;
-import com.epam.jwd.entity.ComponentType;
 import com.epam.jwd.file.Reader;
 import com.epam.jwd.file.Writer;
 import com.epam.jwd.parser.ParagraphParser;
@@ -26,8 +25,10 @@ public class App {
             Writer.writeFile(OUTPUT_FILE_PATH, text.toString());
 
             ComponentUtil.sortSentencesByNumberOfWords(text);
-            List<String> list = ComponentUtil.secondTask(text);
-            System.out.println(list);
+            List<String> uniqueWordsFromSentence = ComponentUtil.getUniqueWordsFromSentence(text, 0);
+            List<String> wordsFromInterrogativeSentences = ComponentUtil.getWordsFromInterrogativeSentences(text, 6);
+            System.out.println(uniqueWordsFromSentence);
+            System.out.println(wordsFromInterrogativeSentences);
         } catch (IOException e) {
             e.printStackTrace();
         }

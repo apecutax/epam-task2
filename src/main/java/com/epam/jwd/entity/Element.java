@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class Element extends Component {
 
-    private final static String PATTERN = "[\\t\\r\\n ]+";
+    private final static String PATTERN = "[^A-Za-z0-9']+";
     private final static String REPLACEMENT = "";
 
     private final String value;
@@ -14,6 +14,16 @@ public class Element extends Component {
     public Element(ComponentType type, String value) {
         super(type);
         this.value = value;
+    }
+
+    @Override
+    public void add(Component child) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void remove(Component child) {
+        throw new UnsupportedOperationException();
     }
 
     public List<Component> getChildren() {

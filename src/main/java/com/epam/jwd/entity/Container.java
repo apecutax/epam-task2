@@ -27,7 +27,7 @@ public class Container extends Component {
 
     @Override
     public String getValue() {
-        return "";
+        throw new UnsupportedOperationException();
     }
 
     @Override
