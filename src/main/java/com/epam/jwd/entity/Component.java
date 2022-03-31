@@ -2,7 +2,7 @@ package com.epam.jwd.entity;
 
 import java.util.List;
 
-public abstract class Component {
+public abstract class Component implements Cloneable {
 
     private final ComponentType type;
 
@@ -10,6 +10,10 @@ public abstract class Component {
         this.type = type;
     }
 
+    /**
+     * Returns the specified component type
+     * @return the specified component type
+     */
     public ComponentType getType() {
         return type;
     }
@@ -18,5 +22,9 @@ public abstract class Component {
     public abstract void remove(Component child);
     public abstract List<Component> getChildren();
     public abstract String getValue();
+    @Override
+    public abstract Component clone();
     public abstract String toString();
+
+
 }

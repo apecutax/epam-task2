@@ -6,8 +6,8 @@ import java.util.Objects;
 
 public class Element extends Component {
 
-    private final static String PATTERN = "[^A-Za-z0-9']+";
-    private final static String REPLACEMENT = "";
+    private static final String CLEANING_PATTERN = "[^A-Za-z0-9']+";
+    private static final String REPLACEMENT = "";
 
     private final String value;
 
@@ -30,8 +30,22 @@ public class Element extends Component {
         return new ArrayList<>();
     }
 
+    /**
+     * Returns the value of the component without punctuation marks and special characters.
+     * It is also used for a more correct comparison.
+     * @return the value of the component
+     */
     public String getValue() {
-        return value.replaceAll(PATTERN, REPLACEMENT);
+        return value.replaceAll(CLEANING_PATTERN, REPLACEMENT);
+    }
+
+    /**
+     * Returns a copy of the component.
+     * @return a copy of the component
+     */
+    @Override
+    public Component clone() {
+        return new Element(getType(), value);
     }
 
     @Override
@@ -51,6 +65,10 @@ public class Element extends Component {
         return getValue().equals(element.getValue());
     }
 
+    /**
+     * Returns the value of the component with punctuation marks and special characters.
+     * @return the value of the component
+     */
     @Override
     public String toString() {
         return value;

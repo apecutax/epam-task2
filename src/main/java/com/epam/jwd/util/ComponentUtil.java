@@ -12,9 +12,9 @@ import java.util.regex.Pattern;
 
 public class ComponentUtil {
 
-    private static final String INTERROGATIVE_SENTENCE_PATTERN = "[\\w\\W]+\\?";
+    private static final String QUESTION_PATTERN = "[\\w\\W]+\\?";
 
-    public static List<Component> getAll(Component component, ComponentType type) {
+    public List<Component> getAll(Component component, ComponentType type) {
         List<Component> result = new ArrayList<>();
         for (Component child : component.getChildren()) {
             if (child.getType() == type) {
@@ -25,13 +25,14 @@ public class ComponentUtil {
         return result;
     }
 
-    public static void sortSentencesByNumberOfWords(Component text) { // task option - 2
-        List<Component> sentences = ComponentUtil.getAll(text, ComponentType.SENTENCE);
-        sentences.sort(Comparator.comparingInt(a -> a.getChildren().size()));
+    public Component getSentencesByNumberOfWords(Component text) { // task option - 2
+        List<Component> sentences = getAll(text, ComponentType.SENTENCE);
+        sentences.sort(Comparator.comparingInt(sentence -> sentence.getChildren().size()));
+        return pack(sentences, ComponentType.TEXT);
     }
 
-    public static List<String> getUniqueWordsFromSentence(Component text, int numberOfSentence) { // task option - 3
-        List<Component> sentences = ComponentUtil.getAll(text, ComponentType.SENTENCE);
+    public List<String> getUniqueWordsFromSentence(Component text, int numberOfSentence) { // task option - 3
+        List<Component> sentences = getAll(text, ComponentType.SENTENCE);
         if (sentences.size() < 2
                 || numberOfSentence < 0
                 || numberOfSentence >= sentences.size()) {
@@ -47,17 +48,18 @@ public class ComponentUtil {
                 .toList();
     }
 
-    public static List<String> getWordsFromInterrogativeSentences(Component text, int lengthOfWords) { // task option - 4
-        List<Component> sentences = ComponentUtil.getAll(text, ComponentType.SENTENCE);
+    public List<String> getWordsFromQuestions(Component text, int lengthOfWords) { // task option - 4
+        List<Component> sentences = getAll(text, ComponentType.SENTENCE);
         sentences.removeIf(component -> !isInterrogativeSentence(component));
-        List<Component> words = ComponentUtil.getAll(pack(sentences, ComponentType.PARAGRAPH), ComponentType.WORD);
+        Component paragraph = pack(sentences, ComponentType.PARAGRAPH);
+        List<Component> words = getAll(paragraph, ComponentType.WORD);
         return words.stream()
                 .map(Component::getValue)
                 .filter(word -> word.length() == lengthOfWords)
                 .toList();
     }
 
-    public static boolean contains(Component component, Component value) {
+    public boolean contains(Component component, Component value) {
         for (Component child : component.getChildren()) {
             if ((child.getType() == value.getType() && child.equals(value))
                     || contains(child, value)) {
@@ -67,7 +69,7 @@ public class ComponentUtil {
         return false;
     }
 
-    public static Component pack(List<Component> children, ComponentType type) {
+    public Component pack(List<Component> children, ComponentType type) {
         Component result = new Container(type);
         for (Component child : children) {
             result.add(child);
@@ -75,8 +77,8 @@ public class ComponentUtil {
         return result;
     }
 
-    public static boolean isInterrogativeSentence(Component sentence) {
-        Pattern pattern = Pattern.compile(INTERROGATIVE_SENTENCE_PATTERN);
+    public boolean isInterrogativeSentence(Component sentence) {
+        Pattern pattern = Pattern.compile(QUESTION_PATTERN);
         Matcher matcher = pattern.matcher(sentence.toString());
         return matcher.find();
     }

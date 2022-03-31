@@ -13,7 +13,12 @@ public enum ComponentType {
         this.delimiter = delimiter;
     }
 
-    public String getValue() {
+    /**
+     * Returns a delimiter for this type of component.
+     * Used to convert a chain of components into text.
+     * @return a delimiter
+     */
+    public String getDelimiter() {
         return delimiter;
     }
 }
